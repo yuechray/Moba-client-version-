@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="Lobby.uss" />
+
+    <ui:VisualElement name="root">
+
+        <!-- Header -->
+        <ui:VisualElement name="header" class="header">
+            <ui:Label text="LOBBY" class="title" />
+            <ui:Label name="status-label" text="Waiting for players…" class="status" />
+        </ui:VisualElement>
+
+        <!-- Team selection -->
+        <ui:VisualElement name="team-row" class="team-row">
+            <ui:Button name="radiant-btn" text="RADIANT" class="btn-radiant" />
+            <ui:Button name="dire-btn" text="DIRE" class="btn-dire" />
+        </ui:VisualElement>
+
+        <!-- Player list -->
+        <ui:ScrollView name="player-list" class="player-list"
+                       horizontal-scroller-visibility="Hidden"
+                       vertical-scroller-visibility="Auto" />
+
+        <!-- Ready button -->
+        <ui:Button name="ready-btn" text="READY" class="btn-ready" />
+
+        <!-- Dev reset button -->
+        <ui:Button name="reset-btn" text="RESET MATCH" class="btn-reset" />
+
+    </ui:VisualElement>
+</ui:UXML>

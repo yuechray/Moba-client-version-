@@ -1,0 +1,54 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements">
+
+  <!-- ─── HUD ─── -->
+  <ui:VisualElement name="hud"
+      style="position: absolute; bottom: 0; left: 0; right: 0; height: 90px;
+             background-color: rgba(0,0,0,0.65); padding: 10px 20px; flex-direction: row; align-items: center;">
+
+    <!-- HP -->
+    <ui:VisualElement style="flex-direction: column; width: 220px; margin-right: 20px;">
+      <ui:Label text="HP" name="hp-label"
+                style="color: rgb(220,80,80); font-size: 13px; margin-bottom: 3px;"/>
+      <ui:ProgressBar name="hp-bar" lowValue="0" highValue="600" value="600"
+                      style="height: 18px;"
+                      title=""/>
+    </ui:VisualElement>
+
+    <!-- Mana -->
+    <ui:VisualElement style="flex-direction: column; width: 220px;">
+      <ui:Label text="Мана" name="mana-label"
+                style="color: rgb(80,120,220); font-size: 13px; margin-bottom: 3px;"/>
+      <ui:ProgressBar name="mana-bar" lowValue="0" highValue="300" value="300"
+                      style="height: 18px;"
+                      title=""/>
+    </ui:VisualElement>
+
+  </ui:VisualElement>
+
+  <!-- ─── GAME OVER PANEL ─── -->
+  <ui:VisualElement name="game-over-panel"
+      style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+             align-items: center; justify-content: center;
+             background-color: rgba(0,0,0,0.75); display: none;">
+
+    <ui:VisualElement
+        style="background-color: rgba(15,15,15,0.95); border-radius: 12px;
+               padding: 48px 72px; align-items: center;">
+
+      <ui:Label name="game-over-title" text="ПОБЕДА!"
+                style="font-size: 56px; -unity-font-style: bold; margin-bottom: 16px;
+                       color: rgb(50,220,50);"/>
+
+      <ui:Label name="game-over-subtitle" text=""
+                style="font-size: 20px; color: rgb(180,180,180); margin-bottom: 40px;"/>
+
+      <ui:Button name="exit-btn" text="Выйти"
+                 style="font-size: 18px; padding: 14px 48px;
+                        background-color: rgb(50,50,50); color: rgb(200,200,200);
+                        border-radius: 6px;"/>
+    </ui:VisualElement>
+
+  </ui:VisualElement>
+
+</ui:UXML>

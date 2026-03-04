@@ -1,0 +1,139 @@
+/* ── Root ───────────────────────────────────────────────────────── */
+#root {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    padding: 40px 0;
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+.header {
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.title {
+    font-size: 40px;
+    -unity-font-style: bold;
+    color: rgb(30, 90, 200);
+    letter-spacing: 6px;
+    margin-bottom: 6px;
+}
+
+.status {
+    font-size: 15px;
+    color: rgb(80, 80, 110);
+    -unity-text-align: middle-center;
+}
+
+/* ── Team row ───────────────────────────────────────────────────── */
+.team-row {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.btn-radiant {
+    width: 160px;
+    height: 48px;
+    margin: 0 8px;
+    border-radius: 10px;
+    border-width: 0;
+    background-color: rgb(30, 130, 60);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.btn-radiant:hover  { background-color: rgb(40, 160, 75); }
+.btn-radiant:active { background-color: rgb(20, 100, 45); }
+
+.btn-radiant.selected {
+    border-width: 3px;
+    border-color: rgb(20, 180, 80);
+}
+
+.btn-dire {
+    width: 160px;
+    height: 48px;
+    margin: 0 8px;
+    border-radius: 10px;
+    border-width: 0;
+    background-color: rgb(180, 40, 40);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.btn-dire:hover  { background-color: rgb(210, 55, 55); }
+.btn-dire:active { background-color: rgb(140, 30, 30); }
+
+.btn-dire.selected {
+    border-width: 3px;
+    border-color: rgb(230, 60, 60);
+}
+
+/* ── Player list ─────────────────────────────────────────────────── */
+.player-list {
+    width: 400px;
+    min-height: 180px;
+    max-height: 260px;
+    background-color: rgb(235, 235, 245);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgb(200, 200, 220);
+    padding: 8px;
+    margin-bottom: 24px;
+}
+
+.player-entry {
+    padding: 10px 14px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    background-color: rgb(255, 255, 255);
+    font-size: 15px;
+    color: rgb(20, 20, 50);
+    white-space: normal;
+}
+
+/* ── Ready button ───────────────────────────────────────────────── */
+.btn-ready {
+    width: 240px;
+    height: 54px;
+    border-radius: 12px;
+    border-width: 0;
+    background-color: rgb(50, 120, 255);
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+    -unity-font-style: bold;
+    letter-spacing: 3px;
+}
+
+.btn-ready:hover  { background-color: rgb(70, 140, 255); }
+.btn-ready:active { background-color: rgb(30, 90, 210); }
+
+.btn-ready.is-ready {
+    background-color: rgb(40, 160, 80);
+}
+
+.btn-ready.is-ready:hover {
+    background-color: rgb(50, 190, 95);
+}
+
+/* ── Reset button (dev tool) ─────────────────────────────────── */
+.btn-reset {
+    width: 160px;
+    height: 32px;
+    border-radius: 6px;
+    border-width: 0;
+    background-color: rgb(160, 60, 20);
+    color: rgb(255, 220, 200);
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-top: 16px;
+}
+
+.btn-reset:hover  { background-color: rgb(190, 75, 25); }
+.btn-reset:active { background-color: rgb(130, 45, 15); }
