@@ -61,6 +61,9 @@ namespace MobaDev.Network
             var args = System.Environment.GetCommandLineArgs();
             for (int i = 0; i < args.Length - 1; i++)
                 if (args[i] == "-stdb-token") token = args[i + 1];
+            if (string.IsNullOrEmpty(token))
+                token = PlayerPrefs.GetString("stdb_token", null);
+            if (string.IsNullOrEmpty(token)) token = null;
 
             var builder = DbConnection.Builder()
                 .WithUri(serverUri)
@@ -88,6 +91,8 @@ namespace MobaDev.Network
 
         private void HandleConnect(DbConnection conn, Identity identity, string token)
         {
+            PlayerPrefs.SetString("stdb_token", token);
+            PlayerPrefs.Save();
             Debug.Log($"[MOBA] Подключено — {identity}");
             conn.SubscriptionBuilder()
                 .OnApplied(_ =>
@@ -152,7 +157,10 @@ namespace MobaDev.Network
         private void HandleStructureDelete(EventContext ctx, Structure s)
         {
             if (!_structures.TryGetValue(s.Id, out var ctrl)) return;
-            Destroy(ctrl.gameObject); _structures.Remove(s.Id);
+            _structures.Remove(s.Id);
+            // Scene-bound objects stay in the scene; only destroy dynamically spawned ones
+            if (ctrl.GetComponent<SceneStructureBinding>() == null)
+                Destroy(ctrl.gameObject);
         }
 
         private void HandleCreepInsert(EventContext ctx, Creep c)

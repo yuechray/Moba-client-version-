@@ -13,28 +13,23 @@ namespace MobaDev.Network
         [SerializeField] public GameObject localChampionPrefab;
         [SerializeField] public GameObject remoteChampionPrefab;
 
-        [Header("Prefabs — Структуры (оставить пустым для fallback-кубов)")]
-        [SerializeField] public GameObject radiantTowerPrefab;
-        [SerializeField] public GameObject direTowerPrefab;
-        [SerializeField] public GameObject radiantThronePrefab;
-        [SerializeField] public GameObject direThroneGO;
-
         [Header("Prefabs — Крипы (оставить пустым для fallback-капсул)")]
         [SerializeField] public GameObject radiantCreepPrefab;
         [SerializeField] public GameObject direCreepPrefab;
         [SerializeField] public GameObject neutralCreepPrefab;
 
+        [Header("Prefabs — Нейтральные мобы по лагерям (индекс 0 = лагерь 1 … 11 = лагерь 12)")]
+        [SerializeField] public GameObject[] campNeutralPrefabs = new GameObject[12];
+
         public void CopyPrefabsFrom(EntityFactory src)
         {
             if (src.localChampionPrefab  != null) localChampionPrefab  = src.localChampionPrefab;
             if (src.remoteChampionPrefab != null) remoteChampionPrefab = src.remoteChampionPrefab;
-            if (src.radiantTowerPrefab   != null) radiantTowerPrefab   = src.radiantTowerPrefab;
-            if (src.direTowerPrefab      != null) direTowerPrefab      = src.direTowerPrefab;
-            if (src.radiantThronePrefab  != null) radiantThronePrefab  = src.radiantThronePrefab;
-            if (src.direThroneGO         != null) direThroneGO         = src.direThroneGO;
             if (src.radiantCreepPrefab   != null) radiantCreepPrefab   = src.radiantCreepPrefab;
             if (src.direCreepPrefab      != null) direCreepPrefab      = src.direCreepPrefab;
-            if (src.neutralCreepPrefab   != null) neutralCreepPrefab   = src.neutralCreepPrefab;
+            if (src.neutralCreepPrefab != null) neutralCreepPrefab = src.neutralCreepPrefab;
+            for (int i = 0; i < src.campNeutralPrefabs.Length; i++)
+                if (src.campNeutralPrefabs[i] != null) campNeutralPrefabs[i] = src.campNeutralPrefabs[i];
         }
 
         public ChampionController SpawnChampion(Champion champ, SpacetimeDB.Identity localIdentity)
@@ -68,48 +63,43 @@ namespace MobaDev.Network
 
         public StructureController SpawnStructure(Structure s)
         {
-            var pos    = SampleHeight(ToVector3(s.Position));
-            var prefab = (s.Type, s.Team) switch
+            var binding = FindSceneBinding(s.Id);
+            if (binding == null)
             {
-                (StructureType.Tower,  Team.Radiant) => radiantTowerPrefab,
-                (StructureType.Tower,  Team.Dire)    => direTowerPrefab,
-                (StructureType.Throne, Team.Radiant) => radiantThronePrefab,
-                (StructureType.Throne, Team.Dire)    => direThroneGO,
-                _                                    => (GameObject)null
-            };
+                Debug.LogError($"[MOBA] Сцен-объект для структуры id={s.Id} ({s.Team} {s.Type}) не найден — добавь SceneStructureBinding.");
+                return null;
+            }
 
-            var go = CreateOrFallback(prefab, pos, () =>
-            {
-                var obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                obj.transform.localScale = s.Type == StructureType.Throne
-                    ? new Vector3(4f, 6f, 4f) : new Vector3(2f, 4f, 2f);
-                var r = obj.GetComponent<Renderer>();
-                if (r != null)
-                {
-                    r.material       = SafeMaterial();
-                    r.material.color = s.Type == StructureType.Throne
-                        ? (s.Team == Team.Radiant ? new Color(0.1f, 1f, 0.1f) : new Color(1f, 0.1f, 0.1f))
-                        : (s.Team == Team.Radiant ? new Color(0.2f, 0.7f, 0.2f) : new Color(0.7f, 0.2f, 0.2f));
-                }
-                return obj;
-            });
-
+            var go = binding.gameObject;
             go.name = $"Structure_{s.Team}_{s.Type}_{s.Lane}_{s.Id}";
             EnsureComponent<BoxCollider>(go);
 
             var ctrl = go.GetComponent<StructureController>() ?? go.AddComponent<StructureController>();
             ctrl.Init(s.Id);
             ctrl.ApplyServerState(s);
-
-            Debug.Log($"[MOBA] Спавн структуры {s.Team} {s.Type} (Lane={s.Lane}) в позиции {pos}");
             return ctrl;
+        }
+
+        private static SceneStructureBinding FindSceneBinding(ulong id)
+        {
+            foreach (var b in FindObjectsByType<SceneStructureBinding>(FindObjectsSortMode.None))
+                if (b.structureId == id) return b;
+            return null;
         }
 
         public CreepController SpawnCreep(Creep c)
         {
             var pos    = SampleHeight(ToVector3(c.Position));
-            var prefab = c.Type == CreepType.Neutral ? neutralCreepPrefab
-                       : c.Team == Team.Radiant      ? radiantCreepPrefab : direCreepPrefab;
+            GameObject prefab;
+            if (c.Type == CreepType.Neutral && c.CampId >= 1 && c.CampId <= 12)
+            {
+                int idx = (int)c.CampId - 1;
+                prefab = campNeutralPrefabs[idx] ?? neutralCreepPrefab;
+            }
+            else
+            {
+                prefab = c.Team == Team.Radiant ? radiantCreepPrefab : direCreepPrefab;
+            }
 
             var go = CreateOrFallback(prefab, pos, () =>
             {
