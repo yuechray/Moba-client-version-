@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="Login.uss" />
+
+    <ui:VisualElement name="root">
+
+        <!-- Shown while connecting to SpacetimeDB -->
+        <ui:VisualElement name="connecting-panel" class="panel">
+            <ui:Label text="MOBA" class="logo" />
+            <ui:Label text="Connecting to server…" class="subtitle" />
+        </ui:VisualElement>
+
+        <!-- Shown when no UserProfile exists yet -->
+        <ui:VisualElement name="register-panel" class="panel">
+            <ui:Label text="MOBA" class="logo" />
+            <ui:Label text="Choose your username" class="subtitle" />
+            <ui:TextField name="username-field" label="" placeholder-text="Enter username (1–24 chars)" class="field" />
+            <ui:Label name="error-label" class="error" />
+            <ui:Button name="register-btn" text="PLAY" class="btn-primary" />
+        </ui:VisualElement>
+
+        <!-- Shown when UserProfile already exists -->
+        <ui:VisualElement name="welcome-panel" class="panel">
+            <ui:Label text="MOBA" class="logo" />
+            <ui:Label name="welcome-label" class="welcome" />
+            <ui:Button name="enter-lobby-btn" text="ENTER LOBBY" class="btn-primary" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>
